@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligencia Competitiva Q1 2026 | Bancolombia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --black: #000000;
+            --white: #FFFFFF;
+            --gray-50: #FAFAFA;
+            --gray-100: #F5F5F5;
+            --gray-200: #E5E5E5;
+            --gray-300: #D4D4D4;
+            --gray-400: #A3A3A3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            /* Bancolombia accent colors (rebrand 2021) */
+            --accent-yellow: #F5C518;
+            --accent-coral: #FF6B6B;
+            --accent-teal: #00C9A7;
+            --accent-blue: #4DABF7;
+            --accent-pink: #E64980;
+            --accent-lime: #94D82D;
+            --verde: #22C55E;
+            --verde-bg: #F0FDF4;
+            --rojo: #EF4444;
+            --rojo-bg: #FEF2F2;
+            --amarillo-bg: #FFFBEB;
+            --azul-bg: #EFF6FF;
+            --sidebar-w: 250px;
+            --header-h: 68px;
+            --radius: 8px;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.65;
+            font-size: 14px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--white);
+            height: var(--header-h);
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .header-left { display:flex; align-items:center; gap:16px; }
+        .header-logo { height: 32px; }
+        .header-sep { width:1px; height:28px; background:var(--gray-200); }
+        .header-text h1 { font-size:0.92rem; font-weight:700; color:var(--black); letter-spacing:-0.2px; }
+        .header-text .sub { font-size:0.68rem; color:var(--gray-500); font-weight:400; text-transform:uppercase; letter-spacing:1px; }
+        .header-right { display:flex; align-items:center; gap:12px; }
+        .q-badge { background:var(--black); color:var(--white); padding:5px 14px; border-radius:20px; font-weight:800; font-size:0.75rem; letter-spacing:0.5px; }
+        .h-date { color:var(--gray-400); font-size:0.72rem; }
+        .conf-tag { border:1px solid var(--gray-300); color:var(--gray-500); padding:3px 10px; border-radius:4px; font-size:0.65rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position:fixed; top:var(--header-h); left:0; bottom:0;
+            width:var(--sidebar-w); background:var(--white);
+            border-right:1px solid var(--gray-200);
+            overflow-y:auto; z-index:900; padding:16px 0;
+        }
+        .sidebar::-webkit-scrollbar { width:3px; }
+        .sidebar::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
+        .nav-label { padding:10px 20px 5px; font-size:0.6rem; text-transform:uppercase; letter-spacing:2px; color:var(--gray-400); font-weight:700; }
+        .nav-item {
+            display:flex; align-items:center; gap:8px;
+            padding:8px 20px; color:var(--gray-600);
+            text-decoration:none; font-size:0.8rem; font-weight:500;
+            border-left:2px solid transparent;
+            cursor:pointer; transition:all 0.12s;
+        }
+        .nav-item:hover { background:var(--gray-50); color:var(--black); }
+        .nav-item.active { background:var(--gray-100); color:var(--black); border-left-color:var(--black); font-weight:700; }
+        .nav-icon { width:16px; text-align:center; font-size:0.85rem; }
+
+        /* ===== MAIN ===== */
+        .main { margin-left:var(--sidebar-w); margin-top:var(--header-h); padding:24px 28px; max-width:1080px; }
+        .section { display:none; animation:fadeIn 0.25s ease; }
+        .section.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+        .pg-header { margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--gray-200); }
+        .pg-header h2 { font-size:1.3rem; font-weight:800; color:var(--black); letter-spacing:-0.3px; }
+        .pg-header p { color:var(--gray-500); font-size:0.82rem; margin-top:2px; }
+
+        /* ===== CARDS ===== */
+        .card { background:var(--white); border-radius:var(--radius); padding:22px; margin-bottom:16px; border:1px solid var(--gray-200); }
+        .card-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid var(--black); }
+        .card-head h3 { font-size:0.95rem; font-weight:700; color:var(--black); }
+        .card-tag { font-size:0.65rem; font-weight:700; padding:3px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; }
+        .card h3 { font-size:0.9rem; font-weight:700; color:var(--gray-800); margin:16px 0 6px; }
+        .card h3:first-child { margin-top:0; }
+        .card p { color:var(--gray-600); font-size:0.85rem; margin-bottom:6px; }
+
+        /* ===== KPIs ===== */
+        .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:12px; margin-bottom:20px; }
+        .kpi { background:var(--white); border-radius:var(--radius); padding:18px; border:1px solid var(--gray-200); position:relative; overflow:hidden; }
+        .kpi::after { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:var(--black); }
+        .kpi-val { font-size:1.7rem; font-weight:900; color:var(--black); line-height:1.1; }
+        .kpi-lbl { font-size:0.7rem; color:var(--gray-500); margin-top:3px; font-weight:500; text-transform:uppercase; letter-spacing:0.5px; }
+        .kpi-d { font-size:0.68rem; font-weight:700; margin-top:5px; display:inline-flex; align-items:center; gap:3px; padding:2px 7px; border-radius:3px; }
+        .kpi-d.up { color:#166534; background:var(--verde-bg); }
+        .kpi-d.down { color:#991B1B; background:var(--rojo-bg); }
+        .kpi-d.st { color:var(--gray-600); background:var(--gray-100); }
+
+        /* ===== TABLES ===== */
+        .tw { overflow-x:auto; margin:12px 0; border-radius:var(--radius); border:1px solid var(--gray-200); }
+        table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+        th { background:var(--black); color:var(--white); padding:10px 12px; text-align:left; font-weight:600; font-size:0.74rem; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; white-space:nowrap; }
+        th:hover { background:var(--gray-800); }
+        th .si { opacity:0.4; font-size:0.6rem; margin-left:3px; }
+        td { padding:9px 12px; border-bottom:1px solid var(--gray-100); }
+        tr:hover td { background:var(--gray-50); }
+
+        /* ===== BADGES ===== */
+        .badge { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:3px; font-size:0.7rem; font-weight:700; }
+        .b-up { background:var(--verde-bg); color:#166534; }
+        .b-down { background:var(--rojo-bg); color:#991B1B; }
+        .b-st { background:var(--gray-100); color:var(--gray-600); }
+        .b-new { background:var(--azul-bg); color:#1E40AF; }
+        .b-hi { background:var(--verde-bg); color:#166534; }
+        .b-md { background:var(--amarillo-bg); color:#92400E; }
+
+        /* ===== CALLOUTS ===== */
+        .co { padding:14px 18px; border-radius:6px; margin:12px 0; font-size:0.85rem; border-left:3px solid; }
+        .co strong { display:block; margin-bottom:3px; font-size:0.82rem; }
+        .co-insight { background:var(--amarillo-bg); border-color:var(--accent-yellow); }
+        .co-insight strong { color:var(--gray-900); }
+        .co-alert { background:var(--rojo-bg); border-color:var(--rojo); }
+        .co-alert strong { color:var(--rojo); }
+        .co-ok { background:var(--verde-bg); border-color:var(--verde); }
+        .co-ok strong { color:#166534; }
+        .co-info { background:var(--azul-bg); border-color:var(--accent-blue); }
+        .co-info strong { color:#1E40AF; }
+
+        /* ===== COMPETITOR CARDS ===== */
+        .cg { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px; }
+        .cc { background:var(--white); border-radius:var(--radius); border:1px solid var(--gray-200); overflow:hidden; transition:transform 0.15s,box-shadow 0.15s; }
+        .cc:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+        .cc-h { padding:12px 16px; color:white; display:flex; justify-content:space-between; align-items:center; }
+        .cc-h span:first-child { font-weight:700; font-size:0.9rem; }
+        .cc-b { padding:12px 16px; }
+        .cc-r { display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid var(--gray-100); font-size:0.8rem; }
+        .cc-r:last-child { border:none; }
+        .cc-rl { color:var(--gray-500); }
+        .cc-rv { font-weight:700; color:var(--gray-900); text-align:right; max-width:55%; }
+
+        /* ===== CAMPAIGN GALLERY ===== */
+        .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin:16px 0; }
+        .gal-item { border:1px solid var(--gray-200); border-radius:var(--radius); overflow:hidden; background:var(--white); }
+        .gal-img { width:100%; height:180px; object-fit:cover; background:var(--gray-100); display:block; }
+        .gal-img-placeholder { width:100%; height:180px; background:linear-gradient(135deg,var(--gray-100),var(--gray-200)); display:flex; align-items:center; justify-content:center; color:var(--gray-400); font-size:0.8rem; font-weight:600; text-align:center; padding:16px; }
+        .gal-cap { padding:12px 14px; }
+        .gal-cap strong { font-size:0.85rem; color:var(--black); display:block; margin-bottom:3px; }
+        .gal-cap p { font-size:0.78rem; color:var(--gray-500); margin:0 0 6px; }
+        .gal-cap .gal-tags { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px; }
+        .gal-cap .gt { font-size:0.65rem; padding:2px 6px; border-radius:3px; font-weight:600; }
+        .gt-tv { background:#FAF5FF; color:#6B46C1; }
+        .gt-dig { background:var(--azul-bg); color:#1E40AF; }
+        .gt-social { background:var(--verde-bg); color:#166534; }
+        .gt-ooh { background:#FFF7ED; color:#9A3412; }
+        .gt-promo { background:var(--amarillo-bg); color:#92400E; }
+        .gal-link { font-size:0.75rem; color:var(--accent-blue); text-decoration:none; font-weight:600; }
+        .gal-link:hover { text-decoration:underline; }
+
+        /* ===== COLLAPSIBLE ===== */
+        .col { background:var(--white); border-radius:var(--radius); border:1px solid var(--gray-200); margin-bottom:10px; overflow:hidden; }
+        .col-t { padding:14px 20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:0.9rem; color:var(--black); border-left:3px solid transparent; transition:background 0.12s; }
+        .col-t:hover { background:var(--gray-50); }
+        .col-t .ch { transition:transform 0.2s; color:var(--gray-400); font-size:0.65rem; }
+        .col.open .col-t .ch { transform:rotate(180deg); }
+        .col-b { max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+        .col.open .col-b { max-height:8000px; }
+        .col-i { padding:0 20px 20px; }
+
+        /* ===== TABS ===== */
+        .tabs { display:flex; gap:5px; margin-bottom:16px; flex-wrap:wrap; }
+        .tb { padding:7px 16px; border:1.5px solid var(--gray-300); border-radius:5px; cursor:pointer; font-size:0.78rem; font-weight:600; background:var(--white); color:var(--gray-600); transition:all 0.12s; }
+        .tb:hover { border-color:var(--black); color:var(--black); }
+        .tb.active { background:var(--black); color:var(--white); border-color:var(--black); }
+        .tp { display:none; }
+        .tp.active { display:block; }
+
+        /* ===== CHART ===== */
+        .chb { position:relative; margin:14px 0; padding:10px; background:var(--white); border-radius:var(--radius); }
+        .chr { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+
+        /* ===== UTILS ===== */
+        .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        ul { margin:5px 0 5px 16px; }
+        li { margin-bottom:2px; font-size:0.85rem; color:var(--gray-600); }
+        .tags { display:flex; flex-wrap:wrap; gap:4px; margin:6px 0; }
+        .tag { padding:2px 8px; border-radius:3px; font-size:0.7rem; font-weight:600; background:var(--gray-100); color:var(--gray-600); }
+
+        .footer { margin-top:32px; padding:16px 0; border-top:1px solid var(--gray-200); text-align:center; color:var(--gray-400); font-size:0.72rem; }
+        .footer img { height:18px; opacity:0.3; margin-bottom:4px; }
+
+        @media print {
+            .sidebar,.header{display:none} .main{margin:0;padding:16px;max-width:100%}
+            .section{display:block!important;page-break-inside:avoid;margin-bottom:16px}
+            .col-b{max-height:none!important}
+        }
+        @media(max-width:960px){
+            .sidebar{display:none} .main{margin-left:0;padding:16px}
+            .chr,.two{grid-template-columns:1fr} .cg{grid-template-columns:1fr}
+            .gallery{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-left">
+        <img src="https://www.bancolombia.com/wcm/connect/b8e4c3f2-36a9-497d-a125-ac04f83b0bf8/LogoBancolombia.png?MOD=AJPERES" alt="Bancolombia" class="header-logo">
+        <div class="header-sep"></div>
+        <div class="header-text">
+            <h1>Inteligencia Competitiva &mdash; Publicidad Financiera</h1>
+            <span class="sub">Consumer Insights &middot; Categoria Financiera Colombia</span>
+        </div>
+    </div>
+    <div class="header-right">
+        <span class="q-badge">Q1 2026</span>
+        <span class="h-date">Ene &ndash; Mar 2026</span>
+        <span class="conf-tag">Confidencial</span>
+    </div>
+</header>
+
+<nav class="sidebar">
+    <div class="nav-label">Resumen</div>
+    <a class="nav-item active" onclick="go('resumen')" data-s="resumen"><span class="nav-icon">&#9673;</span> Resumen Ejecutivo</a>
+    <a class="nav-item" onclick="go('panorama')" data-s="panorama"><span class="nav-icon">&#9638;</span> Panorama del Mercado</a>
+    <div class="nav-label">Competidores</div>
+    <a class="nav-item" onclick="go('competidores')" data-s="competidores"><span class="nav-icon">&#9632;</span> Vista General</a>
+    <a class="nav-item" onclick="go('campanas')" data-s="campanas"><span class="nav-icon">&#9733;</span> Campanas Q1 2026</a>
+    <a class="nav-item" onclick="go('fichas')" data-s="fichas"><span class="nav-icon">&#9654;</span> Fichas Detalladas</a>
+    <div class="nav-label">Analisis</div>
+    <a class="nav-item" onclick="go('matrices')" data-s="matrices"><span class="nav-icon">&#9881;</span> Matrices Comparativas</a>
+    <a class="nav-item" onclick="go('productos')" data-s="productos"><span class="nav-icon">&#10023;</span> Analisis por Producto</a>
+    <a class="nav-item" onclick="go('consumer')" data-s="consumer"><span class="nav-icon">&#9829;</span> Consumer Insights</a>
+    <a class="nav-item" onclick="go('regulacion')" data-s="regulacion"><span class="nav-icon">&#9878;</span> Regulacion SFC</a>
+    <a class="nav-item" onclick="go('estrategia')" data-s="estrategia"><span class="nav-icon">&#10148;</span> Implicaciones Estrategicas</a>
+</nav>
+
+<div class="main">
+
+<!-- ========== RESUMEN EJECUTIVO ========== -->
+<div id="resumen" class="section active">
+    <div class="pg-header">
+        <h2>Resumen Ejecutivo Q1 2026</h2>
+        <p>Hallazgos clave del monitoreo competitivo &middot; Enero &ndash; Marzo 2026</p>
+    </div>
+    <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">12</div><div class="kpi-lbl">Competidores monitoreados</div></div>
+        <div class="kpi"><div class="kpi-val">COP 450B+</div><div class="kpi-lbl">Inversion pub. sector (anual)</div><div class="kpi-d up">+12% vs 2024</div></div>
+        <div class="kpi"><div class="kpi-val">45%</div><div class="kpi-lbl">Share digital media mix</div><div class="kpi-d up">+5pp vs 2023</div></div>
+        <div class="kpi"><div class="kpi-val">~20%</div><div class="kpi-lbl">SOV Bancolombia (lider)</div><div class="kpi-d st">Estable</div></div>
+    </div>
+
+    <div class="card">
+        <div class="card-head"><h3>Top 5 Insights Accionables Q1 2026</h3><span class="card-tag" style="background:var(--black);color:var(--white);">Prioridad</span></div>
+        <div class="co co-insight"><strong>1. Nequi alcanza 24M usuarios y Nu Colombia 4M clientes verificados</strong>Nequi ya ofrece publicidad in-app a marcas externas (24M usuarios activos). Nu Colombia cerro 2025 con 4M clientes en cuenta y TC, siendo el 5to en saldos de ahorro en Colombia.</div>
+        <div class="co co-alert"><strong>2. Gap critico en percepcion de innovacion persiste</strong>NPS de neobancos (40-60) duplica al de bancos tradicionales (10-25). BBVA logro +46% descargas con campana "Uga Uga" retando al status quo.</div>
+        <div class="co co-insight"><strong>3. DaviPlata se transforma en "Neobanca" con TC digital</strong>DaviPlata lanzo tarjeta de credito digital con COP$0 cuota de manejo para 1.6M clientes, y bolsillos de ahorro al 8.25% EA. Competencia directa contra Nequi.</div>
+        <div class="co co-insight"><strong>4. Bancolombia lanza campana Seleccion "Hinchas de los que hacen la historia"</strong>GUT Bogota desarrollo campana para el Mundial 2026 (Mar 2026). Mecanica de "kilometros" con tarjetas Mastercard. 10 anos como patrocinador.</div>
+        <div class="co co-alert"><strong>5. Lulo X democratiza ahorro en dolares (4.8% EA)</strong>Lulo Bank lanza Lulo X para ahorro en dolares digitales con tasas hasta 4.8% EA. Territorio sin competencia directa de bancos tradicionales.</div>
+    </div>
+
+    <div class="card">
+        <div class="card-head"><h3>Mapa de Posicionamiento Competitivo</h3><span class="card-tag" style="background:var(--gray-100);color:var(--gray-600);">Q1 2026</span></div>
+        <div class="chb" style="height:420px;"><canvas id="posChart"></canvas></div>
+        <p style="font-size:0.75rem;color:var(--gray-400);text-align:center;">Eje X: Tradicional &larr;&rarr; Digital-First | Eje Y: Masivo &larr;&rarr; Premium</p>
+    </div>
+</div>
+
+<!-- ========== PANORAMA ========== -->
+<div id="panorama" class="section">
+    <div class="pg-header"><h2>Panorama del Mercado Publicitario Financiero</h2><p>Inversion, media mix, share of voice &middot; Q1 2026</p></div>
+    <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">COP 4.8T</div><div class="kpi-lbl">Mercado pub. total Colombia</div></div>
+        <div class="kpi"><div class="kpi-val">8-12%</div><div class="kpi-lbl">Share sector financiero</div></div>
+        <div class="kpi"><div class="kpi-val">+12%</div><div class="kpi-lbl">Crecimiento anual categoria</div></div>
+        <div class="kpi"><div class="kpi-val">350+</div><div class="kpi-lbl">Fintechs activas en Colombia</div></div>
+    </div>
+    <div class="card">
+        <div class="card-head"><h3>Media Mix Sector Financiero</h3></div>
+        <div class="chr">
+            <div class="chb"><canvas id="mmChart"></canvas></div>
+            <div class="chb"><canvas id="mmEvo"></canvas></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-head"><h3>Share of Voice Q1 2026</h3></div>
+        <div class="chb"><canvas id="sovChart"></canvas></div>
+        <div class="tw"><table id="sovT">
+            <thead><tr><th onclick="srt('sovT',0)"># <span class="si">&#8597;</span></th><th onclick="srt('sovT',1)">Marca</th><th onclick="srt('sovT',2)">SOV Est.</th><th onclick="srt('sovT',3)">Inv. (COP B)</th><th>Tendencia Q1</th><th>Foco</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td><strong>Bancolombia</strong></td><td>18-22%</td><td>80-120</td><td><span class="badge b-st">&#9679; Estable</span></td><td>Omnicanal + Seleccion</td></tr>
+                <tr><td>2</td><td><strong>Davivienda</strong></td><td>14-18%</td><td>60-90</td><td><span class="badge b-st">&#9679; Estable</span></td><td>TV emocional + Digital</td></tr>
+                <tr><td>3</td><td><strong>Nequi</strong></td><td>8-12%</td><td>15-30</td><td><span class="badge b-up">&#9650; Crece</span></td><td>Social + In-app ads</td></tr>
+                <tr><td>4</td><td><strong>Banco de Bogota</strong></td><td>7-10%</td><td>30-50</td><td><span class="badge b-st">&#9679; Estable</span></td><td>TV + Patrocinios</td></tr>
+                <tr><td>5</td><td><strong>Nu Colombia</strong></td><td>6-10%</td><td>20-40</td><td><span class="badge b-up">&#9650; Rapido</span></td><td>Digital + Influencers</td></tr>
+                <tr><td>6</td><td><strong>BBVA Colombia</strong></td><td>5-8%</td><td>30-50</td><td><span class="badge b-up">&#9650; Crece</span></td><td>Digital + "Uga Uga"</td></tr>
+                <tr><td>7</td><td><strong>DaviPlata</strong></td><td>5-7%</td><td>10-20</td><td><span class="badge b-up">&#9650; Crece</span></td><td>Neobanca + TC digital</td></tr>
+                <tr><td>8</td><td><strong>RappiPay</strong></td><td>3-5%</td><td>10-20</td><td><span class="badge b-up">&#9650; Crece</span></td><td>In-app + Ecosistema</td></tr>
+                <tr><td>9</td><td><strong>Banco Caja Social</strong></td><td>3-5%</td><td>15-25</td><td><span class="badge b-st">&#9679; Estable</span></td><td>TV/Radio + Jessi Uribe</td></tr>
+                <tr><td>10</td><td><strong>Lulo Bank</strong></td><td>2-4%</td><td>8-15</td><td><span class="badge b-up">&#9650; Crece</span></td><td>Digital + CDTs + USD</td></tr>
+                <tr><td>11</td><td><strong>AV Villas</strong></td><td>2-4%</td><td>10-18</td><td><span class="badge b-down">&#9660; Declive</span></td><td>TV + Digital</td></tr>
+                <tr><td>12</td><td><strong>DaviBank</strong></td><td>1-2%</td><td>3-8</td><td><span class="badge b-new">&#9733; Nuevo</span></td><td>Digital 90%</td></tr>
+            </tbody>
+        </table></div>
+    </div>
+</div>
+
+<!-- ========== CAMPANAS Q1 2026 (NUEVO) ========== -->
+<div id="campanas" class="section">
+    <div class="pg-header">
+        <h2>Campanas Publicitarias Q1 2026</h2>
+        <p>Piezas graficas, campanas activas y referencias visuales de la competencia &middot; Enero &ndash; Marzo 2026</p>
+    </div>
+
+    <!-- BANCOLOMBIA -->
+    <div class="card">
+        <div class="card-head"><h3>Bancolombia</h3><span class="card-tag" style="background:var(--black);color:var(--white);">Nosotros</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Campana "Hinchas de los que hacen la historia" - Piezas audiovisuales + digital</div>
+                <div class="gal-cap">
+                    <strong>"Hinchas de los que hacen la historia"</strong>
+                    <div class="gal-tags"><span class="gt gt-tv">TV</span><span class="gt gt-dig">Digital</span><span class="gt gt-social">Social</span></div>
+                    <p>Campana Mundial 2026 por GUT Bogota + GUT Miami. 10 anos con la Seleccion. Pone a los hinchas como protagonistas con historias reales de clientes. Mecanica de "kilometros" con tarjetas Mastercard. Lanzada 17 Mar 2026.</p>
+                    <a href="https://abceconomia.co/2026/03/16/bancolombia-10-anos-con-la-seleccion-y-nueva-campana/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Campana "Bumbum" - Inclusion financiera</div>
+                <div class="gal-cap">
+                    <strong>"Bumbum" - Estrategia Nacional de Inclusion Financiera</strong>
+                    <div class="gal-tags"><span class="gt gt-tv">TV</span><span class="gt gt-dig">Digital</span></div>
+                    <p>Campana emocional que renueva el compromiso de latir al ritmo del corazon de los colombianos. Dirigida por Adriana Arismendi.</p>
+                    <a href="https://www.revistapym.com.co/articulos/comunicacion/49940/bumbum-la-nueva-campana-de-bancolombia-explicada-por-adriana-arismendi" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NU COLOMBIA -->
+    <div class="card">
+        <div class="card-head"><h3>Nu Colombia</h3><span class="card-tag" style="background:#8A05BE;color:white;">Disruptor</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <img src="https://i.revistapym.com.co/cms/2023/04/04145122/11-1.png?w=1200" alt="Vive Mas con Nu" class="gal-img" onerror="this.outerHTML='<div class=gal-img-placeholder>Campana Vive Mas con Nu</div>'">
+                <div class="gal-cap">
+                    <strong>"Vive Mas con Nu"</strong>
+                    <div class="gal-tags"><span class="gt gt-dig">Digital</span><span class="gt gt-social">Social</span></div>
+                    <p>Basada en 3,500 historias reales de clientes. Presencia en Spotify, Facebook, Instagram, YouTube, LinkedIn. Nu cerro 2025 con 4M clientes en Colombia. 5to lugar en saldos de cuentas de ahorro.</p>
+                    <a href="https://www.revistapym.com.co/articulos/comunicacion/61302/vive-mas-con-nu-es-la-mas-reciente-campana-de-nu-colombia" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Celebracion 100M clientes globales - Exosfera Sphere + Evento Movistar Arena Colombia</div>
+                <div class="gal-cap">
+                    <strong>100 Millones de Clientes - Hito Global</strong>
+                    <div class="gal-tags"><span class="gt gt-dig">Evento</span><span class="gt gt-social">Social</span></div>
+                    <p>Evento en Movistar Arena Colombia (7 Mar 2026). Celebracion global con historias de clientes reales.</p>
+                    <a href="https://blog.nu.com.co/nu-100-millones-de-clientes-historias/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAVIVIENDA -->
+    <div class="card">
+        <div class="card-head"><h3>Davivienda</h3><span class="card-tag" style="background:#ED1C24;color:white;">Tradicional</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <img src="https://ultravioleta.co/wp-content/uploads/2021/09/El-Lugar-Equivocado-de-Davivienda.jpg" alt="El Lugar Equivocado" class="gal-img" onerror="this.outerHTML='<div class=gal-img-placeholder>El Lugar Equivocado - Davivienda</div>'">
+                <div class="gal-cap">
+                    <strong>"El Lugar Equivocado - Aish"</strong>
+                    <div class="gal-tags"><span class="gt gt-tv">TV</span><span class="gt gt-dig">Digital</span></div>
+                    <p>Evolucion de la iconica campana con Leo Burnett. Nueva version "Aish" busca llegar a jovenes. La campana mas longeva y recordada de la categoria financiera colombiana.</p>
+                    <a href="https://ultravioleta.co/vuelve-el-lugar-equivocado-de-davivienda-donde-no-todo-es-lo-que-parece/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Compre y Gane con Davivienda - Campana TC Nov 2025 - Ene 2026</div>
+                <div class="gal-cap">
+                    <strong>"Compre y Gane con Davivienda"</strong>
+                    <div class="gal-tags"><span class="gt gt-promo">Promocion</span><span class="gt gt-dig">Digital</span></div>
+                    <p>Campana Nov 15, 2025 - Ene 31, 2026. Premios por compras de $50,000+ con tarjetas Davivienda. Registro en ganecondavivienda.com.</p>
+                    <a href="https://recursos-digitales.davivienda.com/projects/terminos-y-condiciones-campanas/20251125-tyc-compre-y-gane-con-davivienda-2025.pdf" target="_blank" class="gal-link">Ver T&C &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEQUI -->
+    <div class="card">
+        <div class="card-head"><h3>Nequi</h3><span class="card-tag" style="background:#00C9A7;color:white;">Challenger</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <img src="https://copu.media/wp-content/uploads/2023/10/Logo-Nequi-1.jpg" alt="Nequi Rebranding" class="gal-img" onerror="this.outerHTML='<div class=gal-img-placeholder>Nequi Rebranding</div>'">
+                <div class="gal-cap">
+                    <strong>"Colombia se apropio de Nequi" - Rebranding</strong>
+                    <div class="gal-tags"><span class="gt gt-social">Social</span><span class="gt gt-ooh">OOH</span></div>
+                    <p>Nuevo logo con punto antes de la "N" simbolizando anticipacion. Campana creada a partir de logos dibujados por comerciantes en sus negocios. 24M usuarios activos. Ahora vende publicidad in-app a marcas.</p>
+                    <a href="https://copu.media/nequi-presenta-su-rebranding-de-marca-inspirado-en-los-colombianos-y-con-ello-su-nueva-campana-colombia-se-apropio-de-nequi-%F0%9F%87%A8%F0%9F%87%B4/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Campanas activas Q1 2026: "1,2,3 Por la plata" + Alianza Mercado Libre</div>
+                <div class="gal-cap">
+                    <strong>Campanas Promocionales Q1 2026</strong>
+                    <div class="gal-tags"><span class="gt gt-promo">Promo</span><span class="gt gt-dig">In-app</span></div>
+                    <p><strong>"1, 2, 3, Por la plata"</strong> (Feb 2 - Abr 5, 2026). <strong>Alianza Mercado Libre</strong>: 35% dto primera compra con Visa Nequi (Mar 2 - Jun 2, 2026). <strong>Credito con Boton</strong>: cashback por usar credito (Mar 10-31, 2026).</p>
+                    <a href="https://www.nequi.com.co/promociones/1-2-3-por-la-plata" target="_blank" class="gal-link">Ver promociones &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BBVA -->
+    <div class="card">
+        <div class="card-head"><h3>BBVA Colombia</h3><span class="card-tag" style="background:#004481;color:white;">Global</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Campana "Deja de ser Uga Uga" - DDB Colombia / Mindshare - Premio P&M 2025</div>
+                <div class="gal-cap">
+                    <strong>"Deja de ser Uga Uga"</strong>
+                    <div class="gal-tags"><span class="gt gt-tv">TV</span><span class="gt gt-dig">Digital</span><span class="gt gt-social">Social</span></div>
+                    <p>Premio Mejor Campana Integrada P&M (Ene 2025). Reta a colombianos a usar canales digitales. Resultados: +46% descargas BBVA Movil, +160% BBVA Wallet, +96% ventas digitales anuales.</p>
+                    <a href="https://www.bbva.com/es/bbva-colombia-recibe-un-premio-a-la-mejor-campana-de-publicidad/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Portafolio "Colombia Vive" - Tarjetas con impacto ambiental + Alianza D1</div>
+                <div class="gal-cap">
+                    <strong>"Colombia Vive" + Estrategia 2025-2026</strong>
+                    <div class="gal-tags"><span class="gt gt-dig">Digital</span><span class="gt gt-promo">Producto</span></div>
+                    <p>Tarjetas con impacto ambiental. Financiacion $36M USD a fintech Clara via BBVA Spark. Alianza con D1 para ampliar red de retiros. Nuevo modelo de marketing centrado en el cliente.</p>
+                    <a href="https://www.eltiempo.com/economia/sector-financiero/tres-grandes-movidas-de-bbva-en-2025-para-impulsar-las-finanzas-verdes-y-los-negocios-en-colombia-3514564" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAVIPLATA -->
+    <div class="card">
+        <div class="card-head"><h3>DaviPlata</h3><span class="card-tag" style="background:#ED1C24;color:white;">Neobanca</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Transformacion a "Neobanca" - Nueva imagen y oferta integral</div>
+                <div class="gal-cap">
+                    <strong>Transformacion a Neobanca</strong>
+                    <div class="gal-tags"><span class="gt gt-dig">Digital</span><span class="gt gt-social">Social</span></div>
+                    <p>DaviPlata se transforma en neobanca con oferta integral: TC digital COP$0 cuota (1.6M clientes), bolsillos ahorro 8.25% EA, 19M usuarios, pagos en Amazon, MercadoLibre, Netflix, Spotify, Uber, Rappi.</p>
+                    <a href="https://blog.davivienda.com/detail/con-innovacion-y-cercania-daviplata-se-transforma-para-ser-la-neobanca-de-los-colombianos" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RAPPIPAY -->
+    <div class="card">
+        <div class="card-head"><h3>RappiPay / RappiCard</h3><span class="card-tag" style="background:#FF6600;color:white;">Fintech</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Campanas Q1 2026: 100K creditos activacion + Embajadores del Ahorro</div>
+                <div class="gal-cap">
+                    <strong>Campanas Activas Q1 2026</strong>
+                    <div class="gal-tags"><span class="gt gt-promo">Promo</span><span class="gt gt-dig">In-app</span></div>
+                    <p><strong>100K Creditos Rappi</strong> por activar RappiCard (Mar 3-31, 2026). <strong>Embajadores del Ahorro</strong> RappiCuenta (Feb 4 - Jul 31, 2026). <strong>RappiCard Compartidas</strong>: nueva TC para compartir con familia (Feb 2025). Alianza ELA: 25% dto (Mar 24-26, 2026).</p>
+                    <a href="https://rappicard.co/terminos-y-condiciones-100k-creditos-en-rappi-por-activar-la-rappicard-3/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BANCO CAJA SOCIAL -->
+    <div class="card">
+        <div class="card-head"><h3>Banco Caja Social</h3><span class="card-tag" style="background:#D4930D;color:white;">Social</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Campana "Descarga, Usa y Gana" con Jessi Uribe - The Juju Colombia</div>
+                <div class="gal-cap">
+                    <strong>"Descarga, Usa y Gana" + Jessi Uribe</strong>
+                    <div class="gal-tags"><span class="gt gt-tv">TV</span><span class="gt gt-dig">Digital</span></div>
+                    <p>Campana con Jessi Uribe (The Juju Colombia). COP $1,760M en premios. 88 premios de $5M quincenales por uso de canales digitales. "Gratis El Musical" destaca productos sin costo.</p>
+                    <a href="https://copu.media/the-juju-y-banco-caja-social-lanzan-campana-con-jessi-uribe-que-impulsa-el-uso-de-canales-digitales-y-premia-a-los-colombianos/" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LULO BANK -->
+    <div class="card">
+        <div class="card-head"><h3>Lulo Bank</h3><span class="card-tag" style="background:#1E3A5F;color:white;">Digital</span></div>
+        <div class="gallery">
+            <div class="gal-item">
+                <div class="gal-img-placeholder">Lulo X - Ahorro en dolares digitales hasta 4.8% EA</div>
+                <div class="gal-cap">
+                    <strong>Lulo X - Ahorro en Dolares</strong>
+                    <div class="gal-tags"><span class="gt gt-dig">Digital</span><span class="gt gt-promo">Producto</span></div>
+                    <p>Fintech para ahorrar en dolares digitales con tasa hasta 4.8% EA. Cuenta ahorro: 10.5% EA (ingresos >$3M), 9% EA base. TC abierta al mercado (Sep 2025). "Vivir la vida en dolares".</p>
+                    <a href="https://www.latamfintech.co/articles/llega-a-colombia-la-fintech-lulo-x-para-democratizar-el-sistema-financiero" target="_blank" class="gal-link">Ver fuente &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== COMPETIDORES ========== -->
+<div id="competidores" class="section">
+    <div class="pg-header"><h2>Vista General de Competidores</h2><p>Snapshot de los 12 actores &middot; Datos verificados Q1 2026</p></div>
+    <div class="cg">
+        <div class="cc"><div class="cc-h" style="background:#8A05BE;"><span>Nubank Colombia</span><span class="badge b-up" style="background:rgba(255,255,255,.15);color:#fff">Disruptor</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Tipo</span><span class="cc-rv">Neobanco 100% Digital</span></div><div class="cc-r"><span class="cc-rl">Clientes</span><span class="cc-rv">4M (cierre 2025)</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">6-10%</span></div><div class="cc-r"><span class="cc-rl">Tendencia</span><span class="cc-rv"><span class="badge b-up">&#9650; Rapido</span></span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">Vive Mas con Nu + 100M hito</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#ED1C24;"><span>Davivienda</span><span class="badge" style="background:rgba(255,255,255,.15);color:#fff">Tradicional</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Tipo</span><span class="cc-rv">Banco Tradicional</span></div><div class="cc-r"><span class="cc-rl">Market Share</span><span class="cc-rv">13-15%</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">14-18%</span></div><div class="cc-r"><span class="cc-rl">Tendencia</span><span class="cc-rv"><span class="badge b-st">&#9679; Estable</span></span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">El Lugar Equivocado + Compre y Gane</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#003882;"><span>Banco de Bogota</span><span class="badge" style="background:rgba(255,255,255,.15);color:#fff">Grupo Aval</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Market Share</span><span class="cc-rv">~10%</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">7-10%</span></div><div class="cc-r"><span class="cc-rl">Tendencia</span><span class="cc-rv"><span class="badge b-st">&#9679; Estable</span></span></div><div class="cc-r"><span class="cc-rl">Foco</span><span class="cc-rv">TV + Liga BetPlay</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#004481;"><span>BBVA Colombia</span><span class="badge" style="background:rgba(255,255,255,.15);color:#fff">Global</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Market Share</span><span class="cc-rv">8-10%</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">5-8%</span></div><div class="cc-r"><span class="cc-rl">Tendencia</span><span class="cc-rv"><span class="badge b-up">&#9650; Crece</span></span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">Uga Uga (premio P&M) + Colombia Vive</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#00C9A7;"><span>Nequi</span><span class="badge b-up" style="background:rgba(255,255,255,.15);color:#fff">Challenger</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Tipo</span><span class="cc-rv">Billetera (Bancolombia)</span></div><div class="cc-r"><span class="cc-rl">Usuarios</span><span class="cc-rv">24M activos</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">8-12%</span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">1,2,3 Por la plata + ML 35%</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#D4930D;"><span>Banco Caja Social</span><span class="badge" style="background:rgba(255,255,255,.15);color:#fff">Social</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Market Share</span><span class="cc-rv">~3-4%</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">3-5%</span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">Jessi Uribe + $1,760M premios</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#C0161D;"><span>DaviPlata</span><span class="badge b-up" style="background:rgba(255,255,255,.15);color:#fff">Neobanca</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Usuarios</span><span class="cc-rv">19M</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">5-7%</span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">Neobanca + TC digital $0</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#1E3A5F;"><span>Lulo Bank</span><span class="badge b-up" style="background:rgba(255,255,255,.15);color:#fff">Digital</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Usuarios</span><span class="cc-rv">1-3M</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">2-4%</span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">Lulo X dolares 4.8% + TC nueva</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#008C4E;"><span>AV Villas</span><span class="badge" style="background:rgba(255,255,255,.15);color:#fff">Grupo Aval</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Market Share</span><span class="cc-rv">~2-3%</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">2-4%</span></div><div class="cc-r"><span class="cc-rl">Tendencia</span><span class="cc-rv"><span class="badge b-down">&#9660; Declive</span></span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#FF6600;"><span>RappiPay</span><span class="badge b-up" style="background:rgba(255,255,255,.15);color:#fff">Fintech</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Usuarios</span><span class="cc-rv">3-5M</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">3-5%</span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">100K creditos + Embajadores Ahorro</span></div></div></div>
+        <div class="cc"><div class="cc-h" style="background:#9B171C;"><span>DaviBank</span><span class="badge b-new" style="background:rgba(255,255,255,.15);color:#fff">Nuevo</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Usuarios</span><span class="cc-rv">500K-1M</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">1-2%</span></div><div class="cc-r"><span class="cc-rl">Tendencia</span><span class="cc-rv"><span class="badge b-new">&#9733; Nuevo</span></span></div></div></div>
+        <div class="cc" style="border:2px solid var(--black);"><div class="cc-h" style="background:var(--black);"><span>Bancolombia</span><span style="background:var(--white);color:var(--black);padding:2px 8px;border-radius:3px;font-size:.68rem;font-weight:800;">NOSOTROS</span></div><div class="cc-b"><div class="cc-r"><span class="cc-rl">Market Share</span><span class="cc-rv">~25%</span></div><div class="cc-r"><span class="cc-rl">SOV</span><span class="cc-rv">18-22%</span></div><div class="cc-r"><span class="cc-rl">Usuarios App</span><span class="cc-rv">17-18M</span></div><div class="cc-r"><span class="cc-rl">Campana Q1</span><span class="cc-rv">Hinchas Historia + Seleccion 2026</span></div></div></div>
+    </div>
+</div>
+
+<!-- ========== FICHAS (simplified - key competitors) ========== -->
+<div id="fichas" class="section">
+    <div class="pg-header"><h2>Fichas Detalladas por Competidor</h2><p>Posicionamiento, target, inversion y presencia digital &middot; Q1 2026</p></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#8A05BE;"><span>Nubank Colombia</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Slogan:</strong> "Vive Mas con Nu"</p><p><strong>Posicionamiento:</strong> Neobanco anti-banco. Transparencia, cero comisiones ocultas. 4M clientes verificados (cierre 2025). 5to en saldos ahorro Colombia.</p><p><strong>Target:</strong> Millennials/Gen Z 18-38, estratos 2-4, frustrados con banca tradicional.</p><p><strong>Inversion:</strong> COP 20-40B/ano. ~90% digital. Influencer marketing agresivo con codigos de referido.</p><div class="co co-ok"><strong>NPS ~55.</strong> Comunidad organica de promotores. Alta satisfaccion UX.</div><div class="co co-alert"><strong>Pain points:</strong> Limites credito bajos. Solo atencion por chat.</div></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#ED1C24;"><span>Davivienda</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Slogan:</strong> "Aqui, su dinero puede mas"</p><p><strong>Posicionamiento:</strong> Banco cercano, familiar. "Casita roja". Benchmark creativo de la categoria.</p><p><strong>Target:</strong> Familias estratos 2-5, 25-55 anos.</p><p><strong>Inversion:</strong> COP 60-90B/ano. ~40% TV, ~35% Digital, ~15% OOH.</p><div class="co co-insight"><strong>Ventaja creativa:</strong> "El Lugar Equivocado" es la campana financiera mas longeva y recordada. Con Leo Burnett, nueva version "Aish" busca jovenes.</div></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#004481;"><span>BBVA Colombia</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Slogan:</strong> "Creando Oportunidades"</p><p><strong>Campana estrella:</strong> "Deja de ser Uga Uga" (DDB/Mindshare) - Premio P&M Mejor Campana Integrada. +46% descargas app, +160% Wallet, +96% ventas digitales.</p><p><strong>Estrategia 2025-26:</strong> Portafolio "Colombia Vive" (tarjetas verdes). Alianza D1 para retiros. $36M USD a Clara (BBVA Spark).</p><p><strong>Inversion:</strong> COP 30-50B/ano. ~45% Digital, ~30% TV.</p></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#00C9A7;"><span>Nequi</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Slogan:</strong> "Tu plata sin complicaciones"</p><p><strong>24M usuarios activos.</strong> Ahora vende publicidad in-app a marcas externas. Rebranding con nuevo logo (punto antes de N) inspirado en comerciantes.</p><p><strong>Campanas Q1:</strong> "1,2,3 Por la plata" (Feb-Abr). Alianza Mercado Libre 35% dto (Mar-Jun). Credito con Boton cashback (Mar).</p><p><strong>Inversion:</strong> COP 15-30B/ano + revenue de publicidad in-app. ~80% Digital/Social.</p></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#C0161D;"><span>DaviPlata</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Transformacion a "Neobanca".</strong> 19M usuarios. Ya no solo billetera: TC digital $0 cuota (1.6M clientes), bolsillos ahorro 8.25% EA, pagos en Amazon, ML, Netflix, Spotify, Uber, Rappi.</p><p><strong>Target:</strong> Todos los estratos, enfasis inclusion financiera estratos 1-3.</p><div class="co co-alert"><strong>Amenaza directa:</strong> DaviPlata con TC y ahorro compite frontalmente con Nequi y Nu. Monitorear evolucion.</div></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#1E3A5F;"><span>Lulo Bank</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Lulo X:</strong> Ahorro en dolares digitales hasta 4.8% EA. Cuenta ahorro: 10.5% EA (ingreso >$3M). TC abierta al mercado desde Sep 2025.</p><p><strong>Posicionamiento:</strong> "Vivir la vida en dolares". Unico neobanco con propuesta fuerte en forex.</p><p><strong>Inversion:</strong> COP 8-15B/ano. ~85% Digital.</p><div class="co co-insight"><strong>First-mover en USD masivo.</strong> Diferenciador relevante sin competencia directa de bancos grandes.</div></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#FF6600;"><span>RappiPay / RappiCard</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Campanas Q1:</strong> 100K creditos activacion (Mar). Embajadores del Ahorro (Feb-Jul). RappiCard Compartidas (Feb 2025). 25% dto ELA (Mar).</p><p><strong>Estrategia:</strong> Cross-sell desde ecosistema Rappi. ~50% in-app, ~40% digital.</p></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:#D4930D;"><span>Banco Caja Social</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p>Campana con <strong>Jessi Uribe</strong> (The Juju Colombia). COP $1,760M en premios por uso de canales digitales. "Gratis El Musical" destaca productos sin costo. Enfoque inclusion + microfinanzas.</p></div></div></div>
+    <div class="col" onclick="tog(this)"><div class="col-t" style="border-left-color:var(--black);background:var(--gray-50);"><span>Bancolombia (Auto-tracking)</span><span class="ch">&#9660;</span></div><div class="col-b"><div class="col-i"><p><strong>Campana Q1:</strong> "Hinchas de los que hacen la historia" (GUT Bogota, Mar 2026). 10 anos Seleccion. Mecanica "kilometros" con Mastercard.</p><div class="co co-ok"><strong>Fortalezas:</strong> Mayor SOV, app 17-18M usuarios, ecosistema Bancolombia + Nequi + A la Mano + Sufi.</div><div class="co co-alert"><strong>Retos Q1:</strong> NPS inferior a neobancos. DaviPlata se transforma en competidor directo de Nequi. Lulo X captura ahorro USD sin respuesta. BBVA crece con Uga Uga.</div></div></div></div>
+</div>
+
+<!-- ========== MATRICES ========== -->
+<div id="matrices" class="section">
+    <div class="pg-header"><h2>Matrices Comparativas</h2><p>Benchmarks entre competidores &middot; Q1 2026</p></div>
+    <div class="card"><div class="card-head"><h3>Atributos de Marca</h3></div><div class="chb" style="height:360px;"><canvas id="radarC"></canvas></div></div>
+    <div class="card">
+        <div class="card-head"><h3>Tabla Comparativa Integral</h3></div>
+        <div class="tw"><table id="cmpT"><thead><tr><th onclick="srt('cmpT',0)">Competidor</th><th>Tipo</th><th>SOV</th><th>TOM</th><th>Target</th><th>Canal</th><th>Campana Q1</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Bancolombia</strong></td><td>Lider</td><td>18-22%</td><td>~32%</td><td>Masivo 25-60</td><td>Omnicanal</td><td>Hinchas Historia / Seleccion</td></tr>
+            <tr><td><strong>Davivienda</strong></td><td>Tradicional</td><td>14-18%</td><td>~17%</td><td>Familias 25-55</td><td>TV+Digital</td><td>Lugar Equivocado / Compre y Gane</td></tr>
+            <tr><td><strong>Nequi</strong></td><td>Billetera</td><td>8-12%</td><td>~7%</td><td>Gen Z 16-30</td><td>Social/App</td><td>1,2,3 Por la plata / ML 35%</td></tr>
+            <tr><td><strong>Nu Colombia</strong></td><td>Neobanco</td><td>6-10%</td><td>~4%</td><td>Mill/GenZ</td><td>Digital</td><td>Vive Mas con Nu / 100M hito</td></tr>
+            <tr><td><strong>BBVA</strong></td><td>Global</td><td>5-8%</td><td>~6%</td><td>Prof 25-50</td><td>Digital</td><td>Uga Uga (premio) / Colombia Vive</td></tr>
+            <tr><td><strong>DaviPlata</strong></td><td>Neobanca</td><td>5-7%</td><td>~5%</td><td>Masivo E1-3</td><td>Multi</td><td>Neobanca + TC digital $0</td></tr>
+            <tr><td><strong>RappiPay</strong></td><td>Fintech</td><td>3-5%</td><td>~3%</td><td>Rappi 22-40</td><td>In-app</td><td>100K creditos / Embajadores</td></tr>
+            <tr><td><strong>Caja Social</strong></td><td>Social</td><td>3-5%</td><td>~4%</td><td>E1-3</td><td>TV+Radio</td><td>Jessi Uribe / $1,760M premios</td></tr>
+            <tr><td><strong>Lulo Bank</strong></td><td>Digital</td><td>2-4%</td><td>~2%</td><td>Ahorr 25-50</td><td>Digital</td><td>Lulo X USD 4.8% / TC nueva</td></tr>
+            <tr><td><strong>B. Bogota</strong></td><td>Tradicional</td><td>7-10%</td><td>~10%</td><td>Prof 30-60</td><td>TV+Deporte</td><td>Liga BetPlay / Institucional</td></tr>
+            <tr><td><strong>AV Villas</strong></td><td>Tradicional</td><td>2-4%</td><td>~3%</td><td>Adultos E2-4</td><td>TV+Dig</td><td>Baja actividad</td></tr>
+            <tr><td><strong>DaviBank</strong></td><td>Digital</td><td>1-2%</td><td>&lt;1%</td><td>Gen Z</td><td>Digital</td><td>Construccion de marca</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="card"><div class="card-head"><h3>SOV vs Market Share</h3></div><div class="chb" style="height:360px;"><canvas id="sovSh"></canvas></div><div class="co co-info"><strong>Lectura:</strong> Nequi y Nu tienen SOV muy superior a su market share (alta inversion relativa). Bancolombia y B. Bogota tienen SOV inferior a su share (eficiencia o subinversion).</div></div>
+</div>
+
+<!-- ========== PRODUCTOS ========== -->
+<div id="productos" class="section">
+    <div class="pg-header"><h2>Analisis por Categoria de Producto</h2><p>Comunicacion de productos clave por vertical &middot; Q1 2026</p></div>
+    <div class="card">
+        <div class="tabs">
+            <div class="tb active" onclick="tab(this,'pd')">Banca Digital</div>
+            <div class="tb" onclick="tab(this,'pc')">Captacion</div>
+            <div class="tb" onclick="tab(this,'pk')">Credito/Tarjetas</div>
+            <div class="tb" onclick="tab(this,'pf')">Forex/Cripto</div>
+        </div>
+        <div id="pd" class="tp active">
+            <div class="tw"><table><thead><tr><th>Competidor</th><th>App</th><th>Usuarios</th><th>Novedad Q1</th></tr></thead><tbody>
+                <tr><td><strong>Nequi</strong></td><td>Nequi</td><td>24M activos</td><td>Publicidad in-app a marcas externas</td></tr>
+                <tr><td><strong>DaviPlata</strong></td><td>DaviPlata</td><td>19M</td><td>Transformacion neobanca + TC digital</td></tr>
+                <tr><td><strong>Bancolombia</strong></td><td>App Bancolombia</td><td>17-18M</td><td>Hinchas Historia + Mastercard</td></tr>
+                <tr><td><strong>Nu Colombia</strong></td><td>Nu</td><td>4M clientes</td><td>100M hito global + evento Movistar</td></tr>
+                <tr><td><strong>BBVA</strong></td><td>BBVA App</td><td>3-5M</td><td>+46% descargas (Uga Uga) + D1</td></tr>
+            </tbody></table></div>
+        </div>
+        <div id="pc" class="tp">
+            <div class="tw"><table><thead><tr><th>Competidor</th><th>Producto</th><th>Tasa (EA)</th><th>Diferenciador</th></tr></thead><tbody>
+                <tr><td><strong>Lulo Bank</strong></td><td>Cuenta ahorro</td><td>10.5%</td><td>Mejor tasa ahorro (ingreso >$3M)</td></tr>
+                <tr><td><strong>Lulo X</strong></td><td>Dolares digitales</td><td>4.8% USD</td><td>Unico ahorro en USD masivo</td></tr>
+                <tr><td><strong>DaviPlata</strong></td><td>Bolsillos ahorro</td><td>8.25%</td><td>19M base, inclusion</td></tr>
+                <tr><td><strong>Nu Colombia</strong></td><td>Cajitas</td><td>~11%</td><td>Sin monto minimo</td></tr>
+                <tr><td><strong>Bancolombia</strong></td><td>CDT + Ahorro</td><td>10-11.5%</td><td>Seguridad + ecosistema</td></tr>
+            </tbody></table></div>
+            <div class="co co-alert"><strong>Alerta Q1:</strong> Lulo Bank, Nu y DaviPlata capturan ahorradores con tasas y UX superior. DaviPlata al 8.25% con 19M usuarios es amenaza directa.</div>
+        </div>
+        <div id="pk" class="tp">
+            <div class="tw"><table><thead><tr><th>Competidor</th><th>Producto</th><th>Gancho Q1</th></tr></thead><tbody>
+                <tr><td><strong>DaviPlata</strong></td><td>TC digital nueva</td><td>COP$0 cuota, 1.6M clientes iniciales</td></tr>
+                <tr><td><strong>Nu Colombia</strong></td><td>TC Morada</td><td>Sin cuota, aprobacion digital</td></tr>
+                <tr><td><strong>RappiPay</strong></td><td>RappiCard + Compartidas</td><td>100K creditos activacion + TC compartida</td></tr>
+                <tr><td><strong>Nequi</strong></td><td>Credito con Boton</td><td>Cashback por usar credito (Mar)</td></tr>
+                <tr><td><strong>Lulo Bank</strong></td><td>TC abierta al mercado</td><td>Lanzada Sep 2025, expansion Q1</td></tr>
+            </tbody></table></div>
+        </div>
+        <div id="pf" class="tp">
+            <div class="tw"><table><thead><tr><th>Competidor</th><th>Producto</th><th>Estado Q1</th></tr></thead><tbody>
+                <tr><td><strong>Lulo X</strong></td><td>Dolares digitales 4.8% EA</td><td><span class="badge b-up">Activo - First mover</span></td></tr>
+                <tr><td><strong>RappiPay</strong></td><td>Remesas/conversion</td><td><span class="badge b-up">Activo</span></td></tr>
+                <tr><td><strong>Bancolombia</strong></td><td>Cuenta USD, mesa cambios</td><td><span class="badge b-st">Existente, sin campana</span></td></tr>
+                <tr><td><strong>BBVA</strong></td><td>Forex global</td><td><span class="badge b-st">Existente, limitada</span></td></tr>
+            </tbody></table></div>
+            <div class="co co-alert"><strong>Oportunidad Q1:</strong> Lulo X es first-mover en ahorro USD masivo. Bancolombia tiene infraestructura pero NO comunica. Territorio abierto.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== CONSUMER ========== -->
+<div id="consumer" class="section">
+    <div class="pg-header"><h2>Consumer Insights & Brand Equity</h2><p>Percepcion del consumidor y metricas de marca &middot; Q1 2026</p></div>
+    <div class="card"><div class="card-head"><h3>Top of Mind</h3></div><div class="chb" style="height:300px;"><canvas id="tomC"></canvas></div></div>
+    <div class="card"><div class="card-head"><h3>Drivers de Consideracion</h3></div><div class="chb" style="height:300px;"><canvas id="drvC"></canvas></div></div>
+    <div class="card"><div class="card-head"><h3>NPS: Tradicionales vs Neobancos</h3></div><div class="chb" style="height:260px;"><canvas id="npsC"></canvas></div><div class="co co-alert"><strong>Gap Q1:</strong> Neobancos NPS 40-60 vs tradicionales 10-25. BBVA subiendo con campana Uga Uga (+46% descargas).</div></div>
+    <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-val">85%</div><div class="kpi-lbl">Penetracion smartphones</div></div>
+        <div class="kpi"><div class="kpi-val">30-35M</div><div class="kpi-lbl">Usuarios banca movil</div></div>
+        <div class="kpi"><div class="kpi-val">55-60%</div><div class="kpi-lbl">Adultos bancarizados</div></div>
+        <div class="kpi"><div class="kpi-val">+28%</div><div class="kpi-lbl">Crecimiento tx digitales YoY</div><div class="kpi-d up">Acelerando</div></div>
+    </div>
+</div>
+
+<!-- ========== REGULACION ========== -->
+<div id="regulacion" class="section">
+    <div class="pg-header"><h2>Regulacion Publicitaria (SFC)</h2><p>Marco regulatorio e impacto en comunicacion &middot; Q1 2026</p></div>
+    <div class="card">
+        <div class="card-head"><h3>Marco Vigente</h3></div>
+        <ul><li><strong>CE 029/2014:</strong> Publicidad clara, veraz, no enganosa</li><li><strong>Tasas:</strong> Expresadas como TEA</li><li><strong>CE 007/2023:</strong> Disclaimers en ads digitales + influencer disclosure</li><li><strong>Ley 2300/2023 "Dejen de Fregar":</strong> Restringe outbound (llamadas, SMS, WhatsApp)</li></ul>
+        <div class="co co-alert"><strong>Impacto:</strong> Ley 2300 obliga migracion outbound &rarr; inbound. Favorece marcas con presencia organica (Nequi, Nu). Bancolombia debe fortalecer content marketing.</div>
+    </div>
+    <div class="card">
+        <div class="card-head"><h3>Impacto en Estrategia</h3></div>
+        <div class="tw"><table><thead><tr><th>Regulacion</th><th>Impacto</th><th>Accion</th></tr></thead><tbody>
+            <tr><td>Ley 2300</td><td>Restriccion outbound</td><td>Inbound + content marketing</td></tr>
+            <tr><td>CE 007/2023</td><td>Disclaimers digitales</td><td>Integrar nativamente</td></tr>
+            <tr><td>Influencers</td><td>Disclosure #ad</td><td>Clausulas en contratos</td></tr>
+            <tr><td>Cripto/Forex</td><td>Escrutinio SFC</td><td>Comunicacion educativa</td></tr>
+            <tr><td>Open Finance</td><td>Portabilidad</td><td>Liderar en confianza</td></tr>
+        </tbody></table></div>
+    </div>
+</div>
+
+<!-- ========== ESTRATEGIA ========== -->
+<div id="estrategia" class="section">
+    <div class="pg-header"><h2>Implicaciones Estrategicas</h2><p>Oportunidades, amenazas y plan de accion &middot; Q1 2026</p></div>
+    <div class="card">
+        <div class="card-head"><h3>Oportunidades Q1 2026</h3></div>
+        <div class="co co-ok"><strong>1. Forex/USD masivo.</strong> Lulo X es first-mover. Bancolombia tiene infraestructura pero no comunica. Territorio abierto para captacion masiva.</div>
+        <div class="co co-ok"><strong>2. Fincontent como liderazgo.</strong> Educacion financiera genera mayor engagement. Bancolombia puede ser referente aprovechando credibilidad institucional.</div>
+        <div class="co co-ok"><strong>3. Ecosistema integrado.</strong> Ningun competidor tiene App + Nequi + A la Mano + Sufi. Comunicar interoperabilidad es diferenciador unico.</div>
+        <div class="co co-ok"><strong>4. Campana Seleccion 2026.</strong> "Hinchas de los que hacen la historia" tiene potencial alto con Mundial. Maximizar activacion y medicion de impacto.</div>
+    </div>
+    <div class="card">
+        <div class="card-head"><h3>Amenazas Q1 2026</h3></div>
+        <div class="co co-alert"><strong>1. DaviPlata Neobanca.</strong> TC digital $0 cuota + ahorro 8.25% para 19M usuarios. Competencia frontal contra Nequi y por extension contra ecosistema Bancolombia.</div>
+        <div class="co co-alert"><strong>2. BBVA acelerando.</strong> Campana Uga Uga genero +46% descargas, +96% ventas digitales. Alianza D1 amplifica distribucion. Competidor que crece.</div>
+        <div class="co co-alert"><strong>3. Nequi monetizando audiencia.</strong> Con 24M usuarios y publicidad in-app, Nequi se convierte en medio publicitario. Riesgo de canibalizacion o conflicto de intereses con marca padre.</div>
+        <div class="co co-alert"><strong>4. Creatividad vs inversion.</strong> Davivienda ("El Lugar Equivocado") y BBVA ("Uga Uga") ganan premios con menor inversion. Bancolombia necesita elevar creatividad.</div>
+    </div>
+    <div class="card">
+        <div class="card-head"><h3>Plan de Accion Q2 2026</h3><span class="card-tag" style="background:var(--black);color:var(--white);">Siguiente</span></div>
+        <div class="tw"><table><thead><tr><th>#</th><th>Accion</th><th>Prioridad</th><th>Deadline</th></tr></thead><tbody>
+            <tr><td>1</td><td>Monitoreo mensual SOV digital (Meta Ad Library + social listening)</td><td><span class="badge b-hi">Alta</span></td><td>Abr 2026</td></tr>
+            <tr><td>2</td><td>NPS comparativo trimestral vs Nequi, Nu, Davivienda, BBVA</td><td><span class="badge b-hi">Alta</span></td><td>Abr 2026</td></tr>
+            <tr><td>3</td><td>Estudio percepcion 18-30 vs neobancos</td><td><span class="badge b-hi">Alta</span></td><td>May 2026</td></tr>
+            <tr><td>4</td><td>Analisis impacto DaviPlata Neobanca en usuarios Nequi</td><td><span class="badge b-hi">Alta</span></td><td>May 2026</td></tr>
+            <tr><td>5</td><td>Evaluar oportunidad productos USD para segmento masivo (vs Lulo X)</td><td><span class="badge b-hi">Alta</span></td><td>May 2026</td></tr>
+            <tr><td>6</td><td>Medir efectividad campana "Hinchas de los que hacen la historia"</td><td><span class="badge b-md">Media</span></td><td>Jun 2026</td></tr>
+            <tr><td>7</td><td>Benchmark TikTok engagement vs Nequi y Nu</td><td><span class="badge b-md">Media</span></td><td>Jun 2026</td></tr>
+            <tr><td>8</td><td>Estudio Nequi como medio publicitario: riesgos y oportunidades</td><td><span class="badge b-md">Media</span></td><td>Jun 2026</td></tr>
+        </tbody></table></div>
+    </div>
+    <div class="card" style="border:2px solid var(--black);">
+        <div class="card-head"><h3>Nota Metodologica</h3></div>
+        <p><strong>Periodo:</strong> Q1 2026 (Ene-Mar). Datos de campanas verificados via fuentes publicas. Metricas de usuarios y tasas confirmadas via sitios oficiales y prensa especializada.</p>
+        <p><strong>Fuentes:</strong> Revista P&M, Ultravioleta, COPU Media, La Republica, El Tiempo, Bloomberg Linea, Brandemia, sitios oficiales de competidores.</p>
+        <p><strong>Complementar con:</strong> Asomedios, Invamer Gallup TOM 2026, IAB Colombia, Kantar IBOPE EGM, Admetricks, Meta Ad Library.</p>
+        <p><strong>Proximo reporte:</strong> Q2 2026 (Julio 2026)</p>
+    </div>
+    <div class="footer">
+        <img src="https://www.bancolombia.com/wcm/connect/b8e4c3f2-36a9-497d-a125-ac04f83b0bf8/LogoBancolombia.png?MOD=AJPERES" alt="Bancolombia"><br>
+        Inteligencia Competitiva Q1 2026 &middot; Consumer Insights &middot; Bancolombia &middot; Confidencial
+    </div>
+</div>
+
+</div>
+
+<script>
+function go(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(a=>a.classList.toggle('active',a.dataset.s===id));window.scrollTo({top:0,behavior:'smooth'})}
+function tog(el){if(el.closest('.col-b'))return;el.classList.toggle('open')}
+function tab(btn,id){const c=btn.closest('.card');c.querySelectorAll('.tb').forEach(t=>t.classList.remove('active'));c.querySelectorAll('.tp').forEach(p=>p.classList.remove('active'));btn.classList.add('active');document.getElementById(id).classList.add('active')}
+function srt(tid,ci){const t=document.getElementById(tid),tb=t.querySelector('tbody'),rs=Array.from(tb.querySelectorAll('tr'));const d=t.dataset.sd==='a'?'d':'a';t.dataset.sd=d;rs.sort((a,b)=>{let va=a.cells[ci].textContent.trim(),vb=b.cells[ci].textContent.trim();const na=parseFloat(va.replace(/[^0-9.-]/g,'')),nb=parseFloat(vb.replace(/[^0-9.-]/g,''));if(!isNaN(na)&&!isNaN(nb))return d==='a'?na-nb:nb-na;return d==='a'?va.localeCompare(vb):vb.localeCompare(va)});rs.forEach(r=>tb.appendChild(r))}
+
+document.addEventListener('DOMContentLoaded',function(){
+const C={bk:'#000',yl:'#F5C518',bl:'#4DABF7',rd:'#ED1C24',pr:'#8A05BE',gn:'#00C9A7',or:'#FF6600',nv:'#003882',bb:'#004481',gd:'#D4930D',av:'#008C4E',lu:'#1E3A5F'};
+Chart.defaults.font.family="'Inter',sans-serif";Chart.defaults.font.size=11;Chart.defaults.color='#525252';
+
+new Chart(document.getElementById('posChart'),{type:'scatter',data:{datasets:[
+{label:'Bancolombia',data:[{x:55,y:70}],backgroundColor:C.bk,pointRadius:14},
+{label:'Davivienda',data:[{x:40,y:55}],backgroundColor:C.rd,pointRadius:12},
+{label:'Nequi',data:[{x:85,y:35}],backgroundColor:C.gn,pointRadius:11},
+{label:'Nu Colombia',data:[{x:90,y:40}],backgroundColor:C.pr,pointRadius:10},
+{label:'B. Bogota',data:[{x:30,y:65}],backgroundColor:C.nv,pointRadius:10},
+{label:'BBVA',data:[{x:55,y:75}],backgroundColor:C.bb,pointRadius:9},
+{label:'DaviPlata',data:[{x:65,y:20}],backgroundColor:'#C0161D',pointRadius:9},
+{label:'Lulo Bank',data:[{x:88,y:55}],backgroundColor:C.lu,pointRadius:8},
+{label:'RappiPay',data:[{x:82,y:45}],backgroundColor:C.or,pointRadius:8},
+{label:'Caja Social',data:[{x:20,y:25}],backgroundColor:C.gd,pointRadius:8},
+{label:'AV Villas',data:[{x:35,y:40}],backgroundColor:C.av,pointRadius:7},
+{label:'DaviBank',data:[{x:80,y:30}],backgroundColor:'#9B171C',pointRadius:7}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'Tradicional \u2190\u2192 Digital-First',font:{weight:'bold'}},min:0,max:100,grid:{color:'#F5F5F5'}},y:{title:{display:true,text:'Masivo \u2190\u2192 Premium',font:{weight:'bold'}},min:0,max:100,grid:{color:'#F5F5F5'}}},plugins:{tooltip:{callbacks:{label:c=>c.dataset.label}},legend:{position:'bottom',labels:{usePointStyle:true,padding:8,font:{size:10}}}}}});
+
+new Chart(document.getElementById('mmChart'),{type:'doughnut',data:{labels:['Digital','TV','Radio','OOH','Prensa','Otros'],datasets:[{data:[45,27,10,8,4,6],backgroundColor:[C.bl,C.pr,C.or,C.gn,'#A3A3A3',C.gd],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,plugins:{title:{display:true,text:'Media Mix Financiero Q1 2026',font:{size:12,weight:'bold'}},legend:{position:'bottom',labels:{font:{size:10}}}}}});
+
+new Chart(document.getElementById('mmEvo'),{type:'bar',data:{labels:['2021','2022','2023','2024','Q1 26'],datasets:[{label:'Digital',data:[30,35,40,45,47],backgroundColor:C.bl},{label:'TV',data:[35,32,30,27,26],backgroundColor:C.pr},{label:'Radio',data:[13,12,11,10,10],backgroundColor:C.or},{label:'OOH',data:[9,8,8,8,8],backgroundColor:C.gn},{label:'Otros',data:[13,13,11,10,9],backgroundColor:'#D4D4D4'}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,max:100,title:{display:true,text:'%'}}},plugins:{title:{display:true,text:'Evolucion Media Mix (%)',font:{size:12,weight:'bold'}},legend:{position:'bottom',labels:{font:{size:10}}}}}});
+
+new Chart(document.getElementById('sovChart'),{type:'bar',data:{labels:['Bancolombia','Davivienda','Nequi','B. Bogota','Nu Colombia','BBVA','DaviPlata','RappiPay','Caja Social','Lulo Bank','AV Villas','DaviBank'],datasets:[{label:'SOV %',data:[20,16,10,8.5,8,6.5,6,4,4,3,3,1.5],backgroundColor:[C.bk,C.rd,C.gn,C.nv,C.pr,C.bb,'#C0161D',C.or,C.gd,C.lu,C.av,'#9B171C'],borderRadius:3}]},options:{responsive:true,indexAxis:'y',scales:{x:{max:24,title:{display:true,text:'%'}}},plugins:{legend:{display:false},title:{display:true,text:'Share of Voice Q1 2026',font:{size:12,weight:'bold'}}}}});
+
+new Chart(document.getElementById('radarC'),{type:'radar',data:{labels:['Confianza','Innovacion','Facilidad','Tasas','Jovenes','Empresas'],datasets:[
+{label:'Bancolombia',data:[90,65,70,55,50,90],borderColor:C.bk,backgroundColor:'rgba(0,0,0,.05)',borderWidth:2,pointRadius:3},
+{label:'Davivienda',data:[75,55,60,55,50,70],borderColor:C.rd,backgroundColor:'rgba(237,28,36,.05)',borderWidth:2,pointRadius:3},
+{label:'Nequi',data:[55,90,92,70,95,15],borderColor:C.gn,backgroundColor:'rgba(0,201,167,.05)',borderWidth:2,pointRadius:3},
+{label:'Nu Colombia',data:[50,88,90,85,90,10],borderColor:C.pr,backgroundColor:'rgba(138,5,190,.05)',borderWidth:2,pointRadius:3}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{beginAtZero:true,max:100,ticks:{font:{size:9}}}},plugins:{title:{display:true,text:'Atributos de Marca (0-100)',font:{size:12,weight:'bold'}},legend:{position:'bottom',labels:{font:{size:10}}}}}});
+
+new Chart(document.getElementById('sovSh'),{type:'scatter',data:{datasets:[
+{label:'Bancolombia',data:[{x:25,y:20}],backgroundColor:C.bk,pointRadius:12},
+{label:'Davivienda',data:[{x:14,y:16}],backgroundColor:C.rd,pointRadius:10},
+{label:'B. Bogota',data:[{x:10,y:8.5}],backgroundColor:C.nv,pointRadius:9},
+{label:'BBVA',data:[{x:9,y:6.5}],backgroundColor:C.bb,pointRadius:8},
+{label:'Nequi',data:[{x:5,y:10}],backgroundColor:C.gn,pointRadius:9},
+{label:'Nu Colombia',data:[{x:3,y:8}],backgroundColor:C.pr,pointRadius:8},
+{label:'DaviPlata',data:[{x:4,y:6}],backgroundColor:'#C0161D',pointRadius:8},
+{label:'Caja Social',data:[{x:3.5,y:4}],backgroundColor:C.gd,pointRadius:7},
+{label:'Lulo Bank',data:[{x:1,y:3}],backgroundColor:C.lu,pointRadius:7},
+{label:'RappiPay',data:[{x:1.5,y:4}],backgroundColor:C.or,pointRadius:7}
+]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{title:{display:true,text:'Market Share %',font:{weight:'bold'}},min:0,max:30,grid:{color:'#F5F5F5'}},y:{title:{display:true,text:'SOV %',font:{weight:'bold'}},min:0,max:24,grid:{color:'#F5F5F5'}}},plugins:{legend:{position:'bottom',labels:{usePointStyle:true,font:{size:9}}},title:{display:true,text:'SOV vs Market Share',font:{size:12,weight:'bold'}}}}});
+
+new Chart(document.getElementById('tomC'),{type:'bar',data:{labels:['Bancolombia','Davivienda','B. Bogota','Nequi','BBVA','DaviPlata','Nu Colombia','Caja Social','AV Villas'],datasets:[{label:'%',data:[32,17,10,7,6,5,4,4,3],backgroundColor:[C.bk,C.rd,C.nv,C.gn,C.bb,'#C0161D',C.pr,C.gd,C.av],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:38}},plugins:{legend:{display:false},title:{display:true,text:'Top of Mind Q1 2026',font:{size:12,weight:'bold'}}}}});
+
+new Chart(document.getElementById('drvC'),{type:'bar',data:{labels:['Seguridad','Bajos costos','Calidad App','Red sucursales','Recomendacion','Tasas','Servicio','Marca'],datasets:[{label:'%',data:[60,55,45,40,35,38,32,22],backgroundColor:C.bk,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',scales:{x:{max:68}},plugins:{legend:{display:false},title:{display:true,text:'Drivers de Consideracion',font:{size:12,weight:'bold'}}}}});
+
+new Chart(document.getElementById('npsC'),{type:'bar',data:{labels:['Nu Colombia','Nequi','Lulo Bank','Bancolombia','BBVA','Davivienda','B. Bogota','Caja Social','AV Villas'],datasets:[{label:'NPS',data:[55,52,40,25,22,20,18,15,12],backgroundColor:c=>c.raw>=40?C.gn:c.raw>=25?C.yl:C.rd,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,max:62}},plugins:{legend:{display:false},title:{display:true,text:'NPS Estimado Q1 2026',font:{size:12,weight:'bold'}}}}});
+});
+</script>
+</body>
+</html>
